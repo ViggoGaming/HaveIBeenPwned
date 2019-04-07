@@ -1,28 +1,54 @@
 # Importing libraries
 import json, time, sys, requests
-# Colors
-class colors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
+from termcolor import colored, cprint
+import hashlib
 
-# User input
-user = input(colors.BOLD + "Enter a email. \n" + colors.ENDC)
-# Sents request to the haveibeenpwned api (https://haveibeenpwned.com/api/v2)
-r = requests.get('https://haveibeenpwned.com/api/v2/breachedaccount/' + user)
-# Checks the status code. 200 
-if r.status_code is 200:
-    print(colors.FAIL + "You have been pwned." + colors.ENDC)
-    unload_json = r.text
-    load_json = json.loads(unload_json)
-    print(colors.OKBLUE + "Your email have been leaked on the following sites:" + colors.ENDC)
-    for x in range (0, (len(load_json))):
-        print(colors.HEADER + load_json[x]['Title'] + colors.ENDC)
-else:
-    print(colors.OKGREEN + "You have not been pwned, ;)" + colors.ENDC)
-x = 1
-exit()
+def password():
+    # User input
+    password = input("Enter a password. \n")
+    hash = hashlib.sha1(password.encode()).hexdigest()
+    hashed = hash[0:5]
+    print(hashed)
+    
+    # Sents request to the haveibeenpwned api (https://haveibeenpwned.com/api/v2)
+    r = requests.get('https://api.pwnedpasswords.com/range/' + hashed)
+    # Checks the status code. 200 
+    if r.status_code is 200:
+        cprint("Your password have been pwned.", "red")
+    else:
+        cprint("Your password have not been pwned, ;)", "green")
+    exit()
 
+def email():
+    # User input
+    user = input(colored("Enter a email\n", attrs=['bold']))
+    # Sents request to the haveibeenpwned api (https://haveibeenpwned.com/api/v2)
+    r = requests.get('https://haveibeenpwned.com/api/v2/breachedaccount/' + user)
+    # Checks the status code. 200 
+    if r.status_code is 200:
+        cprint("You have been pwned.\n", "red")
+        unload_json = r.text
+        load_json = json.loads(unload_json)
+        cprint("Your email have been leaked on the following sites:", "blue", attrs=['bold'])
+        for x in range (0, (len(load_json))):
+            cprint(colored(load_json[x]['Title'], "magenta"))
+    else:
+        cprint("You have not been pwned, ;)", "green")
+    x = 1
+    exit()
+
+def menu():
+    print("Choose below:")
+    print("1. Email")
+    print("2. Password")
+    print("3. About")
+    menuinput = input("> ")
+
+    if menuinput == "1":
+        email()
+    elif menuinput == "2":
+        password()
+    else:
+        print("Fejl!")
+
+menu()

@@ -77,7 +77,10 @@ else:
 	elif menuinput == "2":
 		password()
 	elif menuinput == "3":
+		cprint("About:", attrs=["bold"])
+		print("Password:\nThe password gets hashed using sha1, and then only sents the first 5 characters to the API. The API returns the suffix and number of times it has been pwned.\n")
+
 		print("Made by viggo\nAnd a little help from dnorhoj :)\n")
 	else:
-		print("Fejl!")
+		print("Error!")
 

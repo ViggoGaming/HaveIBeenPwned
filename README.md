@@ -1,3 +1,5 @@
+# ATTENTION!! THIS PROJECT HAS BEEN DISCONTINUED DUE TO THE COST OF AN API KEY.
+
 # HaveIBeenPwned
 
 This program was made for learning the purpose, about request and APIs in python.
